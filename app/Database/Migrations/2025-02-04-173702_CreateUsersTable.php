@@ -8,6 +8,7 @@ class CreateUsersTable extends Migration
 {
     public function up()
     {
+        $this->db->query('SET FOREIGN_KEY_CHECKS=0');
         $this->forge->addField([
             'id' => [
                 'type'              => 'INT',
@@ -29,6 +30,7 @@ class CreateUsersTable extends Migration
             'group' => [
                 'type'              => 'INT',
                 'constraint'        => '12',
+                'unsigned'          => true,
                 'null'              => false,
             ],
             'created_at' => [
@@ -45,11 +47,15 @@ class CreateUsersTable extends Migration
             ],
         ]);
         $this->forge->addKey('id', true);
+        $this->forge->addForeignKey('group', 'groups', 'id_group', 'CASCADE', 'CASCADE');
         $this->forge->createTable('users');
+        $this->db->query('SET FOREIGN_KEY_CHECKS=1');
     }
 
     public function down()
     {
+        $this->db->query('SET FOREIGN_KEY_CHECKS=0');
         $this->forge->dropTable('users');
+        $this->db->query('SET FOREIGN_KEY_CHECKS=1');
     }
 }

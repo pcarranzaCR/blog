@@ -8,11 +8,11 @@ class CreateInfoUserTable extends Migration
 {
     public function up()
     {
-        $this->db->query('SET FOREIGN_KEY_CHECKS=0;');
+        $this->db->query('SET FOREIGN_KEY_CHECKS=0');
         $this->forge->addField([
             'id_user' => [
                 'type'              => 'INT',
-                'constraint'        => 12,
+                'constraint'        => '12',
                 'unsigned'          => true,
                 'auto_increment'    => true,
                 'null'              => false,
@@ -30,7 +30,8 @@ class CreateInfoUserTable extends Migration
             'id_country' => [
                 'type'              => 'INT',
                 'constraint'        => '12',
-                'null'              => false,
+                'unsigned'          => true,
+                'null'              => true,
             ],
             'created_at' => [
                 'type'              => 'DATETIME',
@@ -42,14 +43,16 @@ class CreateInfoUserTable extends Migration
             ],
         ]);
         $this->forge->addKey('id_user', true);
-        $this->forge->addForeignKey('id_country', 'countries', 'id_country', 'CASCADE', 'SET NUL');
+        $this->forge->addForeignKey('id_country', 'countries', 'id_country', 'CASCADE', 'SET NULL');
         $this->forge->addForeignKey('id_user', 'users', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('users_info');
-        $this->db->query('SET FOREIGN_KEY_CHECKS=1;');
+        $this->db->query('SET FOREIGN_KEY_CHECKS=1');
     }
 
     public function down()
     {
+        $this->db->query('SET FOREIGN_KEY_CHECKS=0');
         $this->forge->dropTable('users_info');
+        $this->db->query('SET FOREIGN_KEY_CHECKS=1');
     }
 }
